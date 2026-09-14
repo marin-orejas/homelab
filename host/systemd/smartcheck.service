@@ -1,0 +1,6 @@
+[Unit]
+Description=Daily SMART read of the USB media disks
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/smartcheck.sh

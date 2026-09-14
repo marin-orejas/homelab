@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The tab mark. One letter, one shape: the only size that matters is
+       16 px, where anything finer turns to mud. The page repaints this same
+       drawing in the verdict's colour, so the tab itself says whether the
+       machine is well - see src/lib/favicon.ts. -->
+  <rect width="32" height="32" rx="7.5" fill="#A03C87"/>
+  <path d="M7.8 23.2V9.8l8.2 8.6L24.2 9.8V23.2" fill="none" stroke="#FFF9FC"
+        stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

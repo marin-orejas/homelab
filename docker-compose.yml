@@ -1,0 +1,180 @@
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_ROOT}/sabnzbd:/config
+      - ${MOVIES_DISK}:/data-movies
+      - ${TV_DISK}:/data-tv
+      - /var/lib/media-staging:/staging
+    ports:
+      - 8080:8080
+    networks:
+      - medianet
+    logging: *default-logging
+    restart: unless-stopped
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_ROOT}/prowlarr:/config
+    ports:
+      - 9696:9696
+    networks:
+      - medianet
+    logging: *default-logging
+    restart: unless-stopped
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_ROOT}/radarr:/config
+      - ${MOVIES_DISK}:/data
+    ports:
+      - 7878:7878
+    networks:
+      - medianet
+    logging: *default-logging
+    restart: unless-stopped
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_ROOT}/sonarr:/config
+      - ${TV_DISK}:/data
+    ports:
+      - 8989:8989
+    networks:
+      - medianet
+    logging: *default-logging
+    restart: unless-stopped
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${CONFIG_ROOT}/bazarr:/config
+      - ${MOVIES_DISK}/media/movies:/data/media/movies
+      - ${TV_DISK}/media/tv:/data/media/tv
+    ports:
+      - 6767:6767
+    networks:
+      - medianet
+    logging: *default-logging
+    restart: unless-stopped
+
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - DOCKER_MODS=linuxserver/mods:jellyfin-opencl-intel
+    volumes:
+      - ${CONFIG_ROOT}/jellyfin:/config
+      - ${MOVIES_DISK}/media/movies:/data/media/movies:ro
+      - ${TV_DISK}/media/tv:/data/media/tv:ro
+    ports:
+      - 8096:8096
+      - 7359:7359/udp
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    group_add:
+      - "226"
+    networks:
+      - medianet
+    logging: *default-logging
+    restart: unless-stopped
+
+  recyclarr:
+    image: ghcr.io/recyclarr/recyclarr:8
+    container_name: recyclarr
+    user: ${PUID}:${PGID}
+    environment:
+      - TZ=${TZ}
+      - CRON_SCHEDULE=@daily
+      - RADARR_API_KEY=${RADARR_API_KEY}
+      - SONARR_API_KEY=${SONARR_API_KEY}
+    volumes:
+      - ${CONFIG_ROOT}/recyclarr:/config
+    networks:
+      - medianet
+    logging: *default-logging
+    restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    environment:
+      - TUNNEL_TOKEN=${CLOUDFLARE_TUNNEL_TOKEN}
+    command: tunnel run
+    networks:
+      - medianet
+    logging: *default-logging
+    restart: unless-stopped
+
+  # No ports on purpose. The tunnel is the only way in.
+  dashboard-backend:
+    build:
+      context: ./dashboard
+      dockerfile: backend/Dockerfile
+    container_name: dashboard-backend
+    user: ${PUID}:${PGID}
+    environment:
+      - TZ=${TZ}
+      - DASHBOARD_JELLYFIN_URL=http://jellyfin:8096
+      - DASHBOARD_JELLYFIN_API_KEY=${DASHBOARD_JELLYFIN_API_KEY}
+      - DASHBOARD_PROCFS_PATH=/host/proc
+      - DASHBOARD_DISK_MOUNTS=root=/host/root,wd1tb=/host/disks/wd1tb,toshiba2tb=/host/disks/toshiba2tb
+      - DASHBOARD_HOSTNAME=nuc-server
+      - DASHBOARD_SMART_STATE_PATH=/host/smart/latest.json
+      - DASHBOARD_ACCESS_MODE=enforce
+      - DASHBOARD_ACCESS_TEAM_DOMAIN=${DASHBOARD_ACCESS_TEAM_DOMAIN}
+      - DASHBOARD_ACCESS_AUD=${DASHBOARD_ACCESS_AUD}
+    volumes:
+      - /proc:/host/proc:ro
+      - /opt/media-stack/dashboard:/host/root:ro
+      - ${TV_DISK}:/host/disks/wd1tb:ro
+      - ${MOVIES_DISK}:/host/disks/toshiba2tb:ro
+      - /var/lib/smartcheck:/host/smart:ro
+      - ${CONFIG_ROOT}/dashboard:/data
+    networks:
+      - medianet
+    logging: *default-logging
+    restart: unless-stopped
+
+networks:
+  medianet:
+    name: medianet
+    driver: bridge

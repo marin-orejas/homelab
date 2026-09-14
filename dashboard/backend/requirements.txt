@@ -1,0 +1,10 @@
+fastapi==0.141.1
+uvicorn[standard]==0.34.0
+httpx==0.28.1
+psutil==6.1.1
+pydantic-settings==2.7.1
+pyjwt[crypto]==2.13.0
+
+# Floors, not pins. Both stand on a published fix.
+starlette>=1.6.0
+h11>=0.16.0

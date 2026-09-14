@@ -1,0 +1,19 @@
+[Unit]
+Description=Attribute media HDD I/O to the cgroup that caused it
+Wants=docker.service
+After=docker.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/diskwatch.py
+Restart=always
+RestartSec=10
+Nice=19
+IOSchedulingClass=idle
+ProtectHome=yes
+PrivateTmp=yes
+NoNewPrivileges=yes
+ReadWritePaths=/var/log/diskwatch
+
+[Install]
+WantedBy=multi-user.target
