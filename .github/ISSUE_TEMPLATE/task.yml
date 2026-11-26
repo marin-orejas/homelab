@@ -1,0 +1,25 @@
+name: Task
+description: One piece of work, small enough for one session and one PR
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should be true when this is done, and why.
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Done when
+      description: Checks that prove it works, e.g. a command and its expected output.
+      placeholder: |
+        - [ ] `ssh -o PasswordAuthentication=yes nuc-rhel` is refused
+        - [ ] ansible-lint passes in CI
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Links, open questions, out of scope.
