@@ -32,8 +32,16 @@ Version 2 is in progress, and version 1, a Docker Compose media server, is kept 
 
 | Topic | Status |
 |---|---|
-| Foundation: repo reset, ruleset, issue template, CI lint | in progress |
-| Host: Ansible hardening of the NUC | planned |
+| Foundation: repo reset, ruleset, templates, CI lint, workflow docs | done |
+| Host: Ansible configuration and hardening of the NUC | in progress |
+| Repo security: dependency updates, workflow hardening and secret protection | planned |
+| Cluster: k3s on the NUC, installed and hardened by Ansible | planned |
+| GitOps: Argo CD manages itself and everything in the cluster | planned |
+| Platform: HTTPS names, DNS, remote access and cluster policies | planned |
+| Observability: metrics, logs and alerts to the phone | planned |
+| Backup and recovery: off-site backups, tested restores and a measured rebuild | planned |
+| Apps: own app with CI/CD, stateful apps and SLOs | planned |
+| Operations: upgrades, game days, CIS remediation and the v2 release | planned |
 
 ## License
 
