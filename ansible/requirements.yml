@@ -1,0 +1,10 @@
+---
+collections:
+  - name: fedora.linux_system_roles
+    version: "2.7.0"
+  - name: ansible.posix
+    version: "2.2.1"
+  - name: community.general
+    version: "12.6.6"
+  - name: containers.podman
+    version: "1.16.3"

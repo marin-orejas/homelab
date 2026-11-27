@@ -1,0 +1,6 @@
+---
+- name: Configure the host
+  hosts: all
+  tasks:
+    - name: Check that Ansible reaches the host
+      ansible.builtin.ping:
