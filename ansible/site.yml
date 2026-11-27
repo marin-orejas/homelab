@@ -1,0 +1,3 @@
+---
+- name: Configure the host
+  ansible.builtin.import_playbook: playbooks/host.yml
