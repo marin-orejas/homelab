@@ -16,8 +16,8 @@ body:
       description: >-
         Checks that prove it works, e.g. a command and its expected output.
       placeholder: |
-        - [ ] `ssh -o PasswordAuthentication=yes nuc-rhel` is refused
-        - [ ] ansible-lint passes in CI
+        - [ ] `ssh -o PubkeyAuthentication=no nuc-rhel` prints `Permission denied (publickey)`
+        - [ ] The `lint` check passes on the PR
     validations:
       required: true
   - type: textarea
