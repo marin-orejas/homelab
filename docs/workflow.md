@@ -31,8 +31,7 @@ Each issue uses the Task form and covers one outcome: about half a day of work, 
 |---|---|
 | Title | Imperative sentence without a period, e.g. `Add the issue template` |
 | Goal | What is true when the work is done, and why, in 1 or 2 sentences |
-| Done when | 3 to 5 outcomes you can see, in plain words, without commands or output, e.g. `Password login over SSH is refused on both hosts` |
-| Notes | Gotchas and decisions needed during the work |
+| Done when | At most 5 outcomes you can see, in plain words, without commands or output, e.g. `Password login over SSH is refused on both hosts` |
 | Milestone | Exactly 1 |
 | Label | Exactly 1 area for the main change: `repo`, `ansible`, `k8s`, `ci` or `docs`, plus `bug` when it applies |
 | Duplicates | Closed as a duplicate with a link to the original, never deleted. An issue merged into a bigger one is closed the same way |
