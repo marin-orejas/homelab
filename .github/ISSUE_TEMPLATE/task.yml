@@ -14,14 +14,9 @@ body:
     attributes:
       label: Done when
       description: >-
-        3 to 5 outcomes you can see, in plain words. No commands or output.
+        At most 5 outcomes you can see, in plain words. No commands or output.
       placeholder: |
         - [ ] Password login over SSH is refused on both hosts
         - [ ] A second `site.yml` run reports `changed=0`
     validations:
       required: true
-  - type: textarea
-    id: notes
-    attributes:
-      label: Notes
-      description: Gotchas and decisions you need while working. Optional.
