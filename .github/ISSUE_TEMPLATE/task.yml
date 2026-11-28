@@ -1,12 +1,12 @@
 ---
 name: Task
-description: One piece of work, small enough for one session and one PR
+description: One outcome, done in one session and one PR
 body:
   - type: textarea
     id: goal
     attributes:
       label: Goal
-      description: What should be true when this is done, and why.
+      description: What is true when this is done, and why. One or two sentences.
     validations:
       required: true
   - type: textarea
@@ -14,14 +14,14 @@ body:
     attributes:
       label: Done when
       description: >-
-        Checks that prove it works, e.g. a command and its expected output.
+        3 to 5 outcomes you can see, in plain words. No commands or output.
       placeholder: |
-        - [ ] `ssh -o PubkeyAuthentication=no nuc-rhel` prints `Permission denied (publickey)`
-        - [ ] The `lint` check passes on the PR
+        - [ ] Password login over SSH is refused on both hosts
+        - [ ] A second `site.yml` run reports `changed=0`
     validations:
       required: true
   - type: textarea
     id: notes
     attributes:
       label: Notes
-      description: Links, open questions, out of scope.
+      description: Gotchas and decisions you need while working. Optional.
