@@ -11,12 +11,12 @@ flowchart LR
     commits --> pr[Pull request]
     pr --> lint[CI lint]
     lint --> merge[Squash merge]
-    merge --> close[Closing comment]
+    merge --> close[Issue closed]
 ```
 
 ## Planning
 
-Each milestone starts with a planning session. It produces the issues for that milestone only.
+Each milestone starts with a planning session. It groups the milestone's planned work into issues, one outcome each, and produces the issues for that milestone only.
 
 | Output | Where |
 |---|---|
@@ -25,17 +25,17 @@ Each milestone starts with a planning session. It produces the issues for that m
 
 ## Issues
 
-Each issue uses the Task form and fits in a single session and a single PR. Work that does not fit splits into more issues.
+Each issue uses the Task form and covers one outcome: about half a day of work, usually 5 to 10 commits, a single session and a single PR. Small chores stay small, and work that does not fit a session splits into more issues. A squash merge turns each issue into a single commit on `main`, so a PR title that needs "and" between unrelated changes means two issues.
 
 | Part | Rule |
 |---|---|
 | Title | Imperative sentence without a period, e.g. `Add the issue template` |
-| Goal | What is true when the work is done, and why |
-| Done when | A command and what it prints, or a named check in the GitHub UI |
-| Notes | Links, open questions, out of scope |
+| Goal | What is true when the work is done, and why, in 1 or 2 sentences |
+| Done when | 3 to 5 outcomes you can see, in plain words, without commands or output, e.g. `Password login over SSH is refused on both hosts` |
+| Notes | Gotchas and decisions needed during the work |
 | Milestone | Exactly 1 |
-| Label | Exactly 1 area: `repo`, `ansible`, `k8s`, `ci` or `docs`, plus `bug` when it applies |
-| Duplicates | Closed with the reason `duplicate` and a link to the original, never deleted |
+| Label | Exactly 1 area for the main change: `repo`, `ansible`, `k8s`, `ci` or `docs`, plus `bug` when it applies |
+| Duplicates | Closed as a duplicate with a link to the original, never deleted. An issue merged into a bigger one is closed the same way |
 
 ## Branches
 
@@ -83,13 +83,14 @@ The scope is a single lowercase word for the part of the repo that changes. A co
 
 ## Pull requests
 
-The PR body follows the template: What changes, How it was checked and a checklist. Every box in the checklist is ticked before the merge.
+The PR body follows the template with two sections: What changes and How it was checked.
 
 | Part | Rule |
 |---|---|
 | Title | Commit format, at most 66 characters, describes the whole change |
+| What changes | 2 or 3 sentences on what the PR does and why |
 | Issue link | `Closes #<n>`, or `Refs #<n>` when the proof only works on `main` |
-| How it was checked | A command and its output for each "Done when" item |
+| How it was checked | One short line per "Done when" item with its result, without terminal output |
 | Required check | `lint` from the `Lint` workflow: `yamllint --strict .` and `ansible-lint` |
 | Proof PR | Branch `test/<issue>-<slug>`, closed without merge, linked from the real PR |
 
@@ -119,15 +120,15 @@ The `protect-main` ruleset allows only squash merges into `main`, with signed co
 
 ## Closing
 
-Before the merge, I tick each "Done when" box once its proof is in the PR. After the merge, the issue gets a closing comment in this format:
+Before the merge, I tick each "Done when" box once I have run its check. `Closes #<n>` closes the issue at the merge. A closing comment comes only when the PR does not say something: a follow-up issue, a changed decision, or an issue closed by hand after `Refs`. It uses this format:
 
 ```text
-Done in #<pr>. <What is true now.> <How it was proven.>
+Done in #<pr>. <What is true now, or what changed.>
 
 Follow-up: #<n>, #<n>
 ```
 
-- The comment is a single paragraph of at most 4 sentences.
+- The comment is one or two sentences.
 - `Follow-up:` lists only issue numbers, and only when there are any.
 - Anything left over becomes a new issue or goes into an existing one.
 - When the last issue of a milestone closes, the README roadmap gets updated and the milestone closes.
